@@ -1,13 +1,10 @@
 package com.example.android.popularmoviesp1.controller;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,16 +16,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.android.popularmoviesp1.R;
 import com.example.android.popularmoviesp1.model.domain.Movie;
 import com.example.android.popularmoviesp1.model.services.movieservice.IMovieService;
 import com.example.android.popularmoviesp1.model.services.movieservice.MovieServiceException;
 import com.example.android.popularmoviesp1.model.services.movieservice.MovieServiceImpl;
+import com.example.android.popularmoviesp1.utils.AndroidUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -125,6 +120,11 @@ public class PopularMoviesMainFragment extends Fragment{
         @Override
         protected List<Movie> doInBackground(String... strings) {
             List<Movie> movieList=null;
+
+            if (new AndroidUtils(getActivity()).isDeviceOnline() != true) {
+                return null;
+            }
+
             String sortBy=getString(R.string.sort_by_popularity_kw);
             if(strings.length>0){
                 sortBy=strings[0].trim().toLowerCase();
@@ -151,8 +151,12 @@ public class PopularMoviesMainFragment extends Fragment{
         @Override
         protected void onPostExecute(List<Movie> movieList) {
             //super.onPostExecute(movieList);
-            mMovieList=movieList;
-            setupAdapter();
+            if (movieList != null) {
+                mMovieList = movieList;
+                setupAdapter();
+            }
+
+
 
         }
     }
