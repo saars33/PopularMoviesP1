@@ -2,7 +2,6 @@ package com.example.android.popularmoviesp1.model.services.movieservice;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.example.android.popularmoviesp1.R;
 import com.example.android.popularmoviesp1.model.domain.Movie;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,6 @@ public class MovieServiceImpl implements IMovieService {
     private static final String TAG = MovieServiceImpl.class.getSimpleName();
 
     private Context mContext;
-    //Todo: replace the API_KEY below with value from an xml file and mark the xml file to be ignored in GIT
     private String API_KEY_PARAM_VALUE;
 
     private static final String API_KEY_PARAM_KEY = "api_key";
@@ -44,7 +41,7 @@ public class MovieServiceImpl implements IMovieService {
 
     @Override
     public List<Movie> getMoviesByPopularity() throws MovieServiceException {
-        List<Movie> movieList=null;
+        List<Movie> movieList;
 
         String appendedUrl=BASE_URL + POPULAR_MOVIES_APPENDED_URL;
         String urlSpec=Uri.parse(appendedUrl).buildUpon().appendQueryParameter(API_KEY_PARAM_KEY,API_KEY_PARAM_VALUE).build().toString();
@@ -61,7 +58,7 @@ public class MovieServiceImpl implements IMovieService {
     @Override
     public List<Movie> getMoviesByTopRated() throws MovieServiceException {
 
-        List<Movie> movieList=null;
+        List<Movie> movieList;
         String appendedUrl=BASE_URL + TOP_RATED_MOVIES_APPENDED_URL;
         String urlSpec=Uri.parse(appendedUrl).buildUpon().appendQueryParameter(API_KEY_PARAM_KEY,API_KEY_PARAM_VALUE).build().toString();
         try {
@@ -75,7 +72,7 @@ public class MovieServiceImpl implements IMovieService {
     }
 
     private List<Movie> getMovieListForUrl(String urlSpec) throws IOException, JSONException {
-        List<Movie> movieList=null;
+        List<Movie> movieList;
         String responseJSON=getResponsePayload(urlSpec);
         JSONObject responseJsonObject=new JSONObject(responseJSON);
         movieList=parseResponseAndReturnMovieList(responseJsonObject);
@@ -124,7 +121,7 @@ public class MovieServiceImpl implements IMovieService {
     }
 
     private List<Movie> parseResponseAndReturnMovieList(JSONObject jsonBody) throws JSONException {
-        ArrayList<Movie> movieArrayList=new ArrayList<Movie>();
+        ArrayList<Movie> movieArrayList = new ArrayList<>();
 
         JSONArray resultsJsonArray=jsonBody.getJSONArray("results");
         for (int itr=0;itr<resultsJsonArray.length();itr++){
@@ -144,8 +141,7 @@ public class MovieServiceImpl implements IMovieService {
         String poster_path=jsonObject.getString("poster_path");
         String release_date=jsonObject.getString("release_date");
 
-        Movie movie = new Movie(poster_path,id,original_title,overview,popularity,release_date,vote_average);
-        return movie;
+        return new Movie(poster_path, id, original_title, overview, popularity, release_date, vote_average);
 
     }
 }

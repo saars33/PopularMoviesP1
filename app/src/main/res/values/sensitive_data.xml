@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="api_key_value">your_api_key_should_goes_here</string>
+</resources>
